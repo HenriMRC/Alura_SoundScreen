@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using screensound.database;
+﻿using screensound.database;
 using screensound.menu;
 using screensound.models;
 using System;
@@ -13,10 +12,11 @@ namespace screensound
         {
             try
             {
-                using (SqlConnection connection = Connection.GetConnection())
+                ArtistDAL.Add(new Artista("Foo Fighters", "Foo Fighters é uma banda de rock alternativo americana formada por Dave Grohl em 1995."));
+
+                foreach (Artista artist in ArtistDAL.EnumarateArtists())
                 {
-                    connection.Open();
-                    Console.WriteLine(connection.State);
+                    Console.WriteLine(artist);
                 }
             }
             catch (Exception e)
