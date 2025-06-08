@@ -13,11 +13,36 @@ namespace screensound
             try
             {
                 ArtistDAL.Add(new Artista("Foo Fighters", "Foo Fighters é uma banda de rock alternativo americana formada por Dave Grohl em 1995."));
+                int max = int.MinValue;
+                Artista maxArtist = null;
+                foreach (Artista artist in ArtistDAL.EnumarateArtists())
+                {
+                    if (artist.Id > max)
+                    {
+                        max = artist.Id;
+                        maxArtist = artist;
+                    }
+
+                    Console.WriteLine(artist);
+                    Console.WriteLine();
+                }
+
+                if (maxArtist == null)
+                    throw new NullReferenceException();
+
+                maxArtist.Bio = string.Empty;
+                ArtistDAL.Update(maxArtist);
+                Console.WriteLine("\n\n   ========== UPDATED ==========   \n\n");
 
                 foreach (Artista artist in ArtistDAL.EnumarateArtists())
                 {
                     Console.WriteLine(artist);
+                    Console.WriteLine();
                 }
+
+
+                ArtistDAL.Delete(maxArtist);
+                Console.WriteLine("\n\n   ========== DELETED ==========   \n\n");
             }
             catch (Exception e)
             {

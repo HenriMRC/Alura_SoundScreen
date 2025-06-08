@@ -54,5 +54,46 @@ namespace screensound.database
                 }
             }
         }
+
+        public static void Update(Artista artist)
+        {
+            using (SqlConnection connection = Connection.GetConnection())
+            {
+                connection.Open();
+
+                const string COMMAND =
+                    "UPDATE Artists SET Name = @nome, ProfileImage = @perfilPadrao, Bio = @bio WHERE Id = @id";
+                using (SqlCommand command = new SqlCommand(COMMAND, connection))
+                {
+                    command.Parameters.AddWithValue("@nome", artist.Nome);
+                    command.Parameters.AddWithValue("@perfilPadrao", artist.FotoPerfil);
+                    command.Parameters.AddWithValue("@bio", artist.Bio);
+                    command.Parameters.AddWithValue("@id", artist.Id);
+
+                    int result = command.ExecuteNonQuery();
+
+                    Console.WriteLine($"Affected rows {result}");
+                }
+            }
+        }
+
+        public static void Delete(Artista artist) => Delete(artist.Id);
+        public static void Delete(int id)
+        {
+            using (SqlConnection connection = Connection.GetConnection())
+            {
+                connection.Open();
+
+                const string COMMAND = "DELETE FROM Artists WHERE Id = @id";
+                using (SqlCommand command = new SqlCommand(COMMAND, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+
+                    int result = command.ExecuteNonQuery();
+
+                    Console.WriteLine($"Affected rows {result}");
+                }
+            }
+        }
     }
 }
