@@ -5,7 +5,7 @@ namespace screensound.models
 {
     internal class Artista
     {
-        private readonly List<Musica> _musicas = new List<Musica>();
+        private readonly List<Musica> _musicas = new();
 
         public Artista(string nome, string bio)
         {

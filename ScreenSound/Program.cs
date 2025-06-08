@@ -51,16 +51,16 @@ namespace screensound
 
             return;
 
-            Artista ira = new Artista("Ira!", "Banda Ira!");
-            Artista beatles = new Artista("The Beatles", "Banda The Beatles");
+            Artista ira = new("Ira!", "Banda Ira!");
+            Artista beatles = new("The Beatles", "Banda The Beatles");
 
-            Dictionary<string, Artista> artistasRegistrados = new Dictionary<string, Artista>()
+            Dictionary<string, Artista> artistasRegistrados = new()
             {
                 { ira.Nome, ira },
                 { beatles.Nome, beatles }
             };
 
-            Dictionary<int, Menu> opcoes = new Dictionary<int, Menu>()
+            Dictionary<int, Menu> opcoes = new()
             {
                 { 1, new MenuRegistrarArtista() },
                 { 2, new MenuRegistrarMusica() },
