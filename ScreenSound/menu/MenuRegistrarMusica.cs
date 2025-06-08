@@ -1,22 +1,26 @@
-﻿using ScreenSound.Modelos;
+﻿using screensound.models;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 
-namespace ScreenSound.Menus;
+namespace screensound.menu;
 
-internal class MenuMostrarMusicas : Menu
+internal class MenuRegistrarMusica : Menu
 {
     public override void Executar(Dictionary<string, Artista> artistasRegistrados)
     {
         base.Executar(artistasRegistrados);
-        ExibirTituloDaOpcao("Exibir detalhes do artista");
-        Console.Write("Digite o nome do artista que deseja conhecer melhor: ");
+        ExibirTituloDaOpcao("Registro de músicas");
+        Console.Write("Digite o artista cuja música deseja registrar: ");
         string nomeDoArtista = Console.ReadLine()!;
         if (artistasRegistrados.ContainsKey(nomeDoArtista))
         {
+            Console.Write("Agora digite o título da música: ");
+            string tituloDaMusica = Console.ReadLine()!;
             Artista artista = artistasRegistrados[nomeDoArtista];
-            Console.WriteLine("\nDiscografia:");
-            artista.ExibirDiscografia();
-            Console.WriteLine("\nDigite uma tecla para voltar ao menu principal");
-            Console.ReadKey();
+            artista.AdicionarMusica(new Musica(tituloDaMusica));
+            Console.WriteLine($"A música {tituloDaMusica} de {nomeDoArtista} foi registrada com sucesso!");
+            Thread.Sleep(4000);
             Console.Clear();
         }
         else
