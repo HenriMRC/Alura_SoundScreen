@@ -1,8 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using screensound.models;
 
 namespace screensound.database
 {
-    internal class Connection
+    internal class ScreenSoundContext : DbContext
     {
         private const string CONNECTION_STRING =
             "Data Source=(localdb)\\MSSQLLocalDB;" +
@@ -14,6 +15,11 @@ namespace screensound.database
             "Application Intent=ReadWrite;" +
             "Multi Subnet Failover=False";
 
-        public static SqlConnection GetConnection() => new(CONNECTION_STRING);
+        public DbSet<Artist> Artists { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(CONNECTION_STRING);
+        }
     }
 }

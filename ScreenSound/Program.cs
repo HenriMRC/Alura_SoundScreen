@@ -1,4 +1,5 @@
-﻿using screensound.database;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using screensound.database;
 using screensound.menu;
 using screensound.models;
 using System;
@@ -12,37 +13,26 @@ namespace screensound
         {
             try
             {
-                ArtistDAL.Add(new Artista("Foo Fighters", "Foo Fighters é uma banda de rock alternativo americana formada por Dave Grohl em 1995."));
-                int max = int.MinValue;
-                Artista maxArtist = null;
-                foreach (Artista artist in ArtistDAL.EnumarateArtists())
-                {
-                    if (artist.Id > max)
-                    {
-                        max = artist.Id;
-                        maxArtist = artist;
-                    }
+                ScreenSoundContext context = new();
+                ArtistDAL artistDAL = new(context);
+                Artist newArtist = new("Foo Fighters", "Foo Fighters é uma banda de rock alternativo americana formada por Dave Grohl em 1995.");
 
-                    Console.WriteLine(artist);
-                    Console.WriteLine();
-                }
+                EntityEntry<Artist> result = artistDAL.Add(newArtist);
 
-                if (maxArtist == null)
-                    throw new NullReferenceException();
+                foreach (Artist artist in artistDAL.GetList())
+                    Console.WriteLine($"{artist}\n");
 
-                maxArtist.Bio = string.Empty;
-                ArtistDAL.Update(maxArtist);
+                result.Entity.Bio = string.Empty;
+                result = artistDAL.Update(result.Entity);
                 Console.WriteLine("\n\n   ========== UPDATED ==========   \n\n");
 
-                foreach (Artista artist in ArtistDAL.EnumarateArtists())
-                {
-                    Console.WriteLine(artist);
-                    Console.WriteLine();
-                }
+                foreach (Artist artist in artistDAL.GetList())
+                    Console.WriteLine($"{artist}\n");
 
 
-                ArtistDAL.Delete(maxArtist);
+                result = artistDAL.Remove(result.Entity);
                 Console.WriteLine("\n\n   ========== DELETED ==========   \n\n");
+                Console.WriteLine($"{result.Entity}");
             }
             catch (Exception e)
             {
@@ -51,13 +41,13 @@ namespace screensound
 
             return;
 
-            Artista ira = new("Ira!", "Banda Ira!");
-            Artista beatles = new("The Beatles", "Banda The Beatles");
+            Artist ira = new("Ira!", "Banda Ira!");
+            Artist beatles = new("The Beatles", "Banda The Beatles");
 
-            Dictionary<string, Artista> artistasRegistrados = new()
+            Dictionary<string, Artist> artistasRegistrados = new()
             {
-                { ira.Nome, ira },
-                { beatles.Nome, beatles }
+                { ira.Name, ira },
+                { beatles.Name, beatles }
             };
 
             Dictionary<int, Menu> opcoes = new()

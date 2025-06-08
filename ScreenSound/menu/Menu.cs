@@ -15,7 +15,7 @@ namespace screensound.menu
             Console.WriteLine(asteriscos + "\n");
         }
 
-        public virtual void Executar(Dictionary<string, Artista> nusicasRegistradas)
+        public virtual void Executar(Dictionary<string, Artist> nusicasRegistradas)
         {
             Console.Clear();
         }
