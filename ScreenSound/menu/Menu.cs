@@ -2,21 +2,22 @@
 using System;
 using System.Collections.Generic;
 
-namespace screensound.menu;
-
-internal class Menu
+namespace screensound.menu
 {
-    public static void ExibirTituloDaOpcao(string titulo)
+    internal class Menu
     {
-        int quantidadeDeLetras = titulo.Length;
-        string asteriscos = string.Empty.PadLeft(quantidadeDeLetras, '*');
-        Console.WriteLine(asteriscos);
-        Console.WriteLine(titulo);
-        Console.WriteLine(asteriscos + "\n");
-    }
+        public static void ExibirTituloDaOpcao(string titulo)
+        {
+            int quantidadeDeLetras = titulo.Length;
+            string asteriscos = string.Empty.PadLeft(quantidadeDeLetras, '*');
+            Console.WriteLine(asteriscos);
+            Console.WriteLine(titulo);
+            Console.WriteLine(asteriscos + "\n");
+        }
 
-    public virtual void Executar(Dictionary<string, Artista> nusicasRegistradas)
-    {
-        Console.Clear();
+        public virtual void Executar(Dictionary<string, Artista> nusicasRegistradas)
+        {
+            Console.Clear();
+        }
     }
 }

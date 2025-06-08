@@ -14,6 +14,6 @@ namespace screensound.database
             "Application Intent=ReadWrite;" +
             "Multi Subnet Failover=False";
 
-        public static SqlConnection GetConnection() => new(CONNECTION_STRING);
+        public static SqlConnection GetConnection() => new SqlConnection(CONNECTION_STRING);
     }
 }
