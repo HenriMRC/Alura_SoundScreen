@@ -1,6 +1,5 @@
-﻿using screensound.models;
+﻿using screensound.database;
 using System;
-using System.Collections.Generic;
 
 namespace screensound.menu
 {
@@ -15,7 +14,7 @@ namespace screensound.menu
             Console.WriteLine(asteriscos + "\n");
         }
 
-        public virtual void Executar(Dictionary<string, Artist> nusicasRegistradas)
+        public virtual void Executar(ArtistDAL dal)
         {
             Console.Clear();
         }

@@ -5,7 +5,7 @@ namespace screensound.models
 {
     internal class Artist
     {
-        private readonly List<Musica> _musicas = new();
+        private readonly List<Musica> _musics = new();
 
         public Artist(string name, string bio)
         {
@@ -19,17 +19,17 @@ namespace screensound.models
         public string Bio { get; set; }
         public int Id { get; set; }
 
-        public void AdicionarMusica(Musica musica)
+        public void AddMusic(Musica musica)
         {
-            _musicas.Add(musica);
+            _musics.Add(musica);
         }
 
-        public void ExibirDiscografia()
+        public void ShowDiscography()
         {
-            Console.WriteLine($"Discografia do artista {Name}");
-            foreach (var musica in _musicas)
+            Console.WriteLine($"Artist's dircography {Name}");
+            foreach (var musica in _musics)
             {
-                Console.WriteLine($"Música: {musica.Nome}");
+                Console.WriteLine($"Music: {musica.Nome}");
             }
         }
 
@@ -37,8 +37,8 @@ namespace screensound.models
         {
             return 
 $@"            Id: {Id}
-            Nome: {Name}
-            Foto de Perfil: {ProfileImage}
+            Name: {Name}
+            Profile image: {ProfileImage}
             Bio: {Bio}";
         }
     }

@@ -1,33 +1,41 @@
-﻿using screensound.models;
+﻿using screensound.database;
+using screensound.models;
 using System;
-using System.Collections.Generic;
 
 namespace screensound.menu
 {
     internal class MenuMostrarMusicas : Menu
     {
-        public override void Executar(Dictionary<string, Artist> artistasRegistrados)
+        public override void Executar(ArtistDAL dal)
         {
-            base.Executar(artistasRegistrados);
-            ExibirTituloDaOpcao("Exibir detalhes do artista");
-            Console.Write("Digite o nome do artista que deseja conhecer melhor: ");
-            string nomeDoArtista = Console.ReadLine();
-            if (artistasRegistrados.ContainsKey(nomeDoArtista))
+            base.Executar(dal);
+            ExibirTituloDaOpcao("Show artist details");
+            Console.Write("Type the artist's name which you wish to know better: ");
+
+            string? name;
+            while (true)
             {
-                Artist artista = artistasRegistrados[nomeDoArtista];
-                Console.WriteLine("\nDiscografia:");
-                artista.ExibirDiscografia();
-                Console.WriteLine("\nDigite uma tecla para voltar ao menu principal");
-                Console.ReadKey();
-                Console.Clear();
+                name = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(name))
+                    break;
+
+                Console.Write("Artist name cannot be empty. Try again: ");
+            }
+
+            Artist? artist = dal.GetFirstByName(name);
+            if (artist == null)
+            {
+                Console.Write("Artist name not found!");
             }
             else
             {
-                Console.WriteLine($"\nO artista {nomeDoArtista} não foi encontrado!");
-                Console.WriteLine("Digite uma tecla para voltar ao menu principal");
-                Console.ReadKey();
-                Console.Clear();
+                Console.WriteLine("\nDiscography:");
+                artist.ShowDiscography();
             }
+
+            Console.WriteLine("\nPress any key to return to the main menu");
+            Console.ReadKey();
+            Console.Clear();
         }
     }
 }

@@ -1,14 +1,13 @@
-﻿using screensound.models;
+﻿using screensound.database;
 using System;
-using System.Collections.Generic;
 
 namespace screensound.menu
 {
     internal class MenuSair : Menu
     {
-        public override void Executar(Dictionary<string, Artist> artistasRegistrados)
+        public override void Executar(ArtistDAL dal)
         {
-            Console.WriteLine("Tchau tchau :)");
+            Console.WriteLine("Bye bye :)");
         }
     }
 }
