@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace screensound.database.dal
 {
-    internal abstract class DAL<T, U> where T : class where U : DbContext
+    public abstract class DAL<T, U> where T : class where U : DbContext
     {
         protected readonly U context;
 
@@ -16,8 +17,8 @@ namespace screensound.database.dal
             this.context = context;
         }
 
-        internal List<T> GetList() => GetListAsync().Result;
-        internal async Task<List<T>> GetListAsync()
+        public List<T> GetList() => GetListAsync().Result;
+        public async Task<List<T>> GetListAsync()
         {
             List<T> output = new();
             await foreach (T item in DbSet)
@@ -26,23 +27,25 @@ namespace screensound.database.dal
         }
 
 
-        internal EntityEntry<T> Add(T artist)
+        public EntityEntry<T> Add(T item) => AddAsync(item).Result;
+        public async Task<EntityEntry<T>> AddAsync(T item)
         {
-            EntityEntry<T> result = DbSet.Add(artist);
+            ValueTask<EntityEntry<T>> task = DbSet.AddAsync(item);
+            EntityEntry<T> output = await task;
+            context.SaveChanges();
+            return output;
+        }
+
+        public EntityEntry<T> Update(T item)
+        {
+            EntityEntry<T> result = DbSet.Update(item);
             context.SaveChanges();
             return result;
         }
 
-        internal EntityEntry<T> Update(T artist)
+        public EntityEntry<T> Remove(T item)
         {
-            EntityEntry<T> result = DbSet.Update(artist);
-            context.SaveChanges();
-            return result;
-        }
-
-        internal EntityEntry<T> Remove(T artist)
-        {
-            EntityEntry<T> result = DbSet.Update(artist);
+            EntityEntry<T> result = DbSet.Remove(item);
             context.SaveChanges();
             return result;
         }

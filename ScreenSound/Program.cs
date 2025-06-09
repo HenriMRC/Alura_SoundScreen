@@ -28,20 +28,20 @@ namespace screensound
 
         private static void ExibirOpcoesDoMenu()
         {
+            using ScreenSoundContext context = new();
+            ArtistDAL dal = new(context);
+
+            Dictionary<int, Menu> opcoes = new()
+            {
+                { 1, new MenuRegistrarArtista() },
+                { 2, new MenuRegistrarMusica() },
+                { 3, new MenuMostrarArtistas() },
+                { 4, new MenuMostrarMusicas() },
+                { -1, new MenuSair() }
+            };
+
             while (true)
             {
-                ScreenSoundContext context = new();
-                ArtistDAL dal = new(context);
-
-                Dictionary<int, Menu> opcoes = new()
-                {
-                    { 1, new MenuRegistrarArtista() },
-                    { 2, new MenuRegistrarMusica() },
-                    { 3, new MenuMostrarArtistas() },
-                    { 4, new MenuMostrarMusicas() },
-                    { -1, new MenuSair() }
-                };
-
                 ExibirLogo();
                 Console.WriteLine("\nDigite 1 para registrar um artista");
                 Console.WriteLine("Digite 2 para registrar a música de um artista");

@@ -3,8 +3,9 @@ using screensound.models;
 
 namespace screensound.database
 {
-    internal class ScreenSoundContext : DbContext
+    public class ScreenSoundContext : DbContext
     {
+        private readonly string _connectionString;
         private const string CONNECTION_STRING =
             "Data Source=(localdb)\\MSSQLLocalDB;" +
             "Initial Catalog=ScreenSound;" +
@@ -16,10 +17,21 @@ namespace screensound.database
             "Multi Subnet Failover=False";
 
         public DbSet<Artist> Artists { get; set; }
+        public DbSet<Music> Musics { get; set; }
+
+        public ScreenSoundContext()
+        {
+            _connectionString = CONNECTION_STRING;
+        }
+
+        public ScreenSoundContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(CONNECTION_STRING);
+            optionsBuilder.UseSqlServer(_connectionString);
         }
     }
 }

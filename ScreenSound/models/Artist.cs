@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace screensound.models
 {
-    internal class Artist
+    public class Artist
     {
-        private readonly List<Musica> _musics = new();
+        private readonly List<Music> _musics = new();
 
         public Artist(string name, string bio)
         {
@@ -19,7 +19,7 @@ namespace screensound.models
         public string Bio { get; set; }
         public int Id { get; set; }
 
-        public void AddMusic(Musica musica)
+        public void AddMusic(Music musica)
         {
             _musics.Add(musica);
         }
@@ -29,7 +29,7 @@ namespace screensound.models
             Console.WriteLine($"Artist's dircography {Name}");
             foreach (var musica in _musics)
             {
-                Console.WriteLine($"Music: {musica.Nome}");
+                Console.WriteLine($"Music: {musica.Name}");
             }
         }
 

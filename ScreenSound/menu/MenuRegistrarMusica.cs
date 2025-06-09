@@ -43,7 +43,7 @@ namespace screensound.menu
                     Console.Write("Artist name cannot be empty. Try again: ");
                 }
 
-                artist.AddMusic(new Musica(music));
+                artist.AddMusic(new Music(music));
                 Console.WriteLine($"The music {music} from {name} was successfully registered!");
                 Thread.Sleep(4000);
                 Console.Clear();
