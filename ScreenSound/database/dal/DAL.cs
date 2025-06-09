@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,8 +8,6 @@ namespace screensound.database.dal
     public abstract class DAL<T, U> where T : class where U : DbContext
     {
         protected readonly U context;
-
-        protected abstract DbSet<T> DbSet { get; }
 
         protected DAL(U context)
         {
@@ -21,7 +18,7 @@ namespace screensound.database.dal
         public async Task<List<T>> GetListAsync()
         {
             List<T> output = new();
-            await foreach (T item in DbSet)
+            await foreach (T item in context.Set<T>())
                 output.Add(item);
             return output;
         }
@@ -30,7 +27,7 @@ namespace screensound.database.dal
         public EntityEntry<T> Add(T item) => AddAsync(item).Result;
         public async Task<EntityEntry<T>> AddAsync(T item)
         {
-            ValueTask<EntityEntry<T>> task = DbSet.AddAsync(item);
+            ValueTask<EntityEntry<T>> task = context.Set<T>().AddAsync(item);
             EntityEntry<T> output = await task;
             context.SaveChanges();
             return output;
@@ -38,14 +35,14 @@ namespace screensound.database.dal
 
         public EntityEntry<T> Update(T item)
         {
-            EntityEntry<T> result = DbSet.Update(item);
+            EntityEntry<T> result = context.Set<T>().Update(item);
             context.SaveChanges();
             return result;
         }
 
         public EntityEntry<T> Remove(T item)
         {
-            EntityEntry<T> result = DbSet.Remove(item);
+            EntityEntry<T> result = context.Set<T>().Remove(item);
             context.SaveChanges();
             return result;
         }

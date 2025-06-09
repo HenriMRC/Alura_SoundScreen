@@ -1,15 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using screensound.database.dal;
+﻿using screensound.database.dal;
 using screensound.models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace screensound.database
 {
-    internal class ArtistDAL : DAL<Artist, ScreenSoundContext>
+    public class ArtistDAL : DAL<Artist, ScreenSoundContext>
     {
-        protected override DbSet<Artist> DbSet => context.Artists;
-
         public ArtistDAL(ScreenSoundContext context) : base(context) { }
 
         public List<Artist> GetByName(string name) => GetByNameAsync(name).Result;

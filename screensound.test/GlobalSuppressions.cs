@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Assertion", "NUnit2045:Use Assert.Multiple", Justification = "<Pending>", Scope = "member", Target = "~M:screensound.test.Tests.Test")]
+[assembly: SuppressMessage("Assertion", "NUnit2045:Use Assert.Multiple", Justification = "<Pending>", Scope = "module")]

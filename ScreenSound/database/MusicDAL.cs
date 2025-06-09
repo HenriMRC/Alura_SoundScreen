@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using screensound.database.dal;
+﻿using screensound.database.dal;
 using screensound.models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,8 +7,6 @@ namespace screensound.database
 {
     public class MusicDAL : DAL<Music, ScreenSoundContext>
     {
-        protected override DbSet<Music> DbSet => context.Musics;
-
         public MusicDAL(ScreenSoundContext context) : base(context) { }
 
         public List<Music> GetByName(string name) => GetByNameAsync(name).Result;
