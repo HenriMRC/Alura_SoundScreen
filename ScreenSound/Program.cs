@@ -1,5 +1,7 @@
 ﻿using screensound.database;
+using screensound.database.dal;
 using screensound.menu;
+using screensound.models;
 using System;
 using System.Collections.Generic;
 
@@ -29,15 +31,15 @@ namespace screensound
         private static void ExibirOpcoesDoMenu()
         {
             using ScreenSoundContext context = new();
-            ArtistDAL dal = new(context);
+            DAL<Artist> dal = new(context);
 
             Dictionary<int, Menu> opcoes = new()
             {
-                { 1, new MenuRegistrarArtista() },
-                { 2, new MenuRegistrarMusica() },
-                { 3, new MenuMostrarArtistas() },
-                { 4, new MenuMostrarMusicas() },
-                { -1, new MenuSair() }
+                { 1, new RegisterArtistMenu() },
+                { 2, new RegisterMusicMenu() },
+                { 3, new ShowArtistsMenu() },
+                { 4, new ShowMusicsMenu() },
+                { -1, new ExitMenu() }
             };
 
             while (true)

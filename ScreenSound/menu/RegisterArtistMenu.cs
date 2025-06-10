@@ -1,13 +1,13 @@
-﻿using screensound.database;
+﻿using screensound.database.dal;
 using screensound.models;
 using System;
 using System.Threading;
 
 namespace screensound.menu
 {
-    internal class MenuRegistrarArtista : Menu
+    internal class RegisterArtistMenu : Menu
     {
-        public override void Executar(ArtistDAL dal)
+        public override void Executar(DAL<Artist> dal)
         {
             base.Executar(dal);
             ExibirTituloDaOpcao("Artists registry");

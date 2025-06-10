@@ -1,13 +1,13 @@
-﻿using screensound.database;
+﻿using screensound.database.dal;
 using screensound.models;
 using System;
 using System.Threading;
 
 namespace screensound.menu
 {
-    internal class MenuRegistrarMusica : Menu
+    internal class RegisterMusicMenu : Menu
     {
-        public override void Executar(ArtistDAL dal)
+        public override void Executar(DAL<Artist> dal)
         {
             base.Executar(dal);
 
@@ -24,7 +24,7 @@ namespace screensound.menu
                 Console.Write("Artist name cannot be empty. Try again: ");
             }
 
-            Artist? artist = dal.GetFirstByName(name);
+            Artist? artist = dal.First(a => a.Name.Equals(name));
             if (artist == null)
             {
                 Console.Write("Artist name not found!");
@@ -32,7 +32,7 @@ namespace screensound.menu
             else
             {
                 Console.Write("Type the music's title: ");
-                
+
                 string? music;
                 while (true)
                 {

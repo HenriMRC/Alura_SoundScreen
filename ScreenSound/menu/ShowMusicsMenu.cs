@@ -1,12 +1,12 @@
-﻿using screensound.database;
+﻿using screensound.database.dal;
 using screensound.models;
 using System;
 
 namespace screensound.menu
 {
-    internal class MenuMostrarMusicas : Menu
+    internal class ShowMusicsMenu : Menu
     {
-        public override void Executar(ArtistDAL dal)
+        public override void Executar(DAL<Artist> dal)
         {
             base.Executar(dal);
             ExibirTituloDaOpcao("Show artist details");
@@ -22,7 +22,7 @@ namespace screensound.menu
                 Console.Write("Artist name cannot be empty. Try again: ");
             }
 
-            Artist? artist = dal.GetFirstByName(name);
+            Artist? artist = dal.First(a => a.Name.Equals(name));
             if (artist == null)
             {
                 Console.Write("Artist name not found!");

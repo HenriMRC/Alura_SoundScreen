@@ -1,4 +1,5 @@
-﻿using screensound.database;
+﻿using screensound.database.dal;
+using screensound.models;
 using System;
 
 namespace screensound.menu
@@ -14,7 +15,7 @@ namespace screensound.menu
             Console.WriteLine(asteriscos + "\n");
         }
 
-        public virtual void Executar(ArtistDAL dal)
+        public virtual void Executar(DAL<Artist> dal)
         {
             Console.Clear();
         }
