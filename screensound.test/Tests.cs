@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using screensound.database;
+using screensound.database.dal;
 using screensound.models;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace screensound.test
 
             using ScreenSoundContext context = new(SSTEST_CONNECTION_STRING);
 
-            MusicDAL dal = new(context);
+            DAL<Music> dal = new(context);
 
             Task<List<Music>> listTask = dal.GetListAsync();
             do
@@ -150,7 +151,7 @@ namespace screensound.test
             TestContext.Progress.WriteLine(nameof(TestArtists));
 
             using ScreenSoundContext context = new(SSTEST_CONNECTION_STRING);
-            ArtistDAL dal = new(context);
+            DAL<Artist> dal = new(context);
 
             // =======================
             // Get artist list
@@ -211,7 +212,7 @@ namespace screensound.test
 
             // =======================
             // Get first artist
-            Artist? result = dal.GetFirstByNameAsync(NAME).Result;
+            Artist? result = dal.FirstAsync(a => a.Name.Equals(NAME)).Result;
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Name, Is.EqualTo(NAME));
             Assert.That(result.Id, Is.EqualTo(1));
