@@ -1,8 +1,41 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {},
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "C#: screensound Debug (dotnet)",
+                "type": "dotnet",
+                "request": "launch",
+                "projectPath": "/screensound.csproj"
+            },
+            {
+                "name": "C#: screensound Debug (coreclr)",
+                "type": "coreclr",
+                "request": "launch",
+                "preLaunchTask": "build soundscreen",
+                "program": "${workspaceFolder}/ScreenSound/bin/Debug/net6/screensound.dll",
+                "console": "externalTerminal"
+            }
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "build soundscreen",
+                "command": "dotnet",
+                "type": "process",
+                "args": [
+                    "build",
+                    "${workspaceFolder}/ScreenSound/screensound.csproj"
+                ],
+                "problemMatcher": "$msCompile"
+            }
+        ],
+    }
 }
