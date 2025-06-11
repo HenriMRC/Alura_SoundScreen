@@ -11,6 +11,7 @@ namespace screensound.models
 
         public string Name { get; set; }
         public int Id { get; set; }
+        public int? YearOfRelease { get; set; }
 
         public override string ToString()
         {

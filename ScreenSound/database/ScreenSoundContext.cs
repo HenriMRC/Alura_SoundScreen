@@ -8,7 +8,7 @@ namespace screensound.database
         private readonly string _connectionString;
         private const string CONNECTION_STRING =
             "Data Source=(localdb)\\MSSQLLocalDB;" +
-            "Initial Catalog=ScreenSound;" +
+            "Initial Catalog=ScreenSoundV0;" +
             "Integrated Security=True;" +
             //"Connect Timeout=30;" +
             "Encrypt=False;" +
