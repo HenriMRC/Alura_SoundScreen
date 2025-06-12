@@ -4,9 +4,11 @@ using System;
 
 namespace screensound.menu
 {
-    internal class Menu
+    internal abstract class Menu
     {
-        public static void ExibirTituloDaOpcao(string titulo)
+        public abstract string GetOptionInstruction(int optionIndex);
+
+        public static void ShowOptionTitle(string titulo)
         {
             int quantidadeDeLetras = titulo.Length;
             string asteriscos = string.Empty.PadLeft(quantidadeDeLetras, '*');
@@ -15,8 +17,17 @@ namespace screensound.menu
             Console.WriteLine(asteriscos + "\n");
         }
 
-        public virtual void Executar(DAL<Artist> dal)
+        public virtual void PreRun()
         {
+            Console.Clear();
+        }
+
+        public abstract void Run(DAL<Artist> artistDal, DAL<Music> musicDal);
+
+        public virtual void PostRun()
+        {
+            Console.WriteLine("\nPress any key to return to the Main Menu.");
+            Console.ReadKey();
             Console.Clear();
         }
     }

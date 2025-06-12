@@ -4,6 +4,8 @@ using screensound.menu;
 using screensound.models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace screensound
 {
@@ -11,10 +13,10 @@ namespace screensound
     {
         public static void Main()
         {
-            ExibirOpcoesDoMenu();
+            ShowMenuOptions();
         }
 
-        private static void ExibirLogo()
+        private static void ShowLogo()
         {
             Console.WriteLine(@"
 
@@ -25,33 +27,36 @@ namespace screensound
                        ██████╔╝╚█████╔╝██║░░██║███████╗███████╗██║░╚███║  ██████╔╝╚█████╔╝╚██████╔╝██║░╚███║██████╔╝
                        ╚═════╝░░╚════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░╚══╝  ╚═════╝░░╚════╝░░╚═════╝░╚═╝░░╚══╝╚═════╝░
                        ");
-            Console.WriteLine("Boas vindas ao Screen Sound 3.0!");
+            Console.WriteLine($"Welcome to Screen Sound {Assembly.GetExecutingAssembly().GetName().Version}!");
         }
 
-        private static void ExibirOpcoesDoMenu()
+        private static void ShowMenuOptions()
         {
             using ScreenSoundContext context = new();
-            DAL<Artist> dal = new(context);
+            DAL<Artist> artistDal = new(context);
+            DAL<Music> musicDal = new(context);
 
-            Dictionary<int, Menu> opcoes = new()
+            Dictionary<int, Menu> options = new()
             {
                 { 1, new RegisterArtistMenu() },
                 { 2, new RegisterMusicMenu() },
                 { 3, new ShowArtistsMenu() },
                 { 4, new ShowMusicsMenu() },
+                { 5, new ListMusicsOfYearMenu() },
                 { -1, new ExitMenu() }
             };
 
             while (true)
             {
-                ExibirLogo();
-                Console.WriteLine("\nDigite 1 para registrar um artista");
-                Console.WriteLine("Digite 2 para registrar a música de um artista");
-                Console.WriteLine("Digite 3 para mostrar todos os artistas");
-                Console.WriteLine("Digite 4 para exibir todas as músicas de um artista");
-                Console.WriteLine("Digite -1 para sair");
+                ShowLogo();
+                Console.WriteLine();
 
-                Console.Write("\nDigite a sua opção: ");
+                IOrderedEnumerable<KeyValuePair<int, Menu>> orderedOptions =
+                    options.OrderBy(p => p.Key < 0 ? int.MaxValue : p.Key);
+                foreach (KeyValuePair<int, Menu> option in orderedOptions)
+                    Console.WriteLine(option.Value.GetOptionInstruction(option.Key));
+
+                Console.Write("\nChoose one option: ");
 
                 int number;
                 Menu? menu;
@@ -60,13 +65,15 @@ namespace screensound
                     string? numberString = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(numberString) &&
                         int.TryParse(numberString, out number) &&
-                        opcoes.TryGetValue(number, out menu))
+                        options.TryGetValue(number, out menu))
                         break;
 
                     Console.Write("Option is not valid. Try again: ");
                 }
 
-                menu.Executar(dal);
+                menu.PreRun();
+                menu.Run(artistDal, musicDal);
+                menu.PostRun();
 
                 if (number < 0)
                     break;

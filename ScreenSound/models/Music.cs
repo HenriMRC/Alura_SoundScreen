@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace screensound.models
+﻿namespace screensound.models
 {
     public class Music
     {
@@ -16,9 +14,7 @@ namespace screensound.models
 
         public override string ToString()
         {
-            return 
-$@"                Id: {Id}
-                Name: {Name}";
+            return $"\tId: {Id}\n\tName: {Name}\n\tArtist: {Artist?.Name ?? "[NOT REGISTERED]"}";
         }
     }
 }

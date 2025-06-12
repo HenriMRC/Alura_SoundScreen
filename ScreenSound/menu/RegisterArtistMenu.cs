@@ -1,16 +1,19 @@
 ﻿using screensound.database.dal;
 using screensound.models;
 using System;
-using System.Threading;
 
 namespace screensound.menu
 {
     internal class RegisterArtistMenu : Menu
     {
-        public override void Executar(DAL<Artist> dal)
+        public override string GetOptionInstruction(int optionIndex)
         {
-            base.Executar(dal);
-            ExibirTituloDaOpcao("Artists registry");
+            return $"Type {optionIndex} to register an artist";
+        }
+
+        public override void Run(DAL<Artist> artistDal, DAL<Music> musicDal)
+        {
+            ShowOptionTitle("Artists registry");
             Console.Write("Type the artist's name which you wish to register: ");
 
             string? name;
@@ -35,10 +38,8 @@ namespace screensound.menu
             }
 
             Artist artista = new(name, bio);
-            dal.Add(artista);
+            artistDal.Add(artista);
             Console.WriteLine($"{name} was successfully registered!");
-            Thread.Sleep(4000);
-            Console.Clear();
         }
     }
 }

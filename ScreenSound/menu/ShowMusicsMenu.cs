@@ -6,10 +6,14 @@ namespace screensound.menu
 {
     internal class ShowMusicsMenu : Menu
     {
-        public override void Executar(DAL<Artist> dal)
+        public override string GetOptionInstruction(int optionIndex)
         {
-            base.Executar(dal);
-            ExibirTituloDaOpcao("Show artist details");
+            return $"Type {optionIndex} to print the musics of an artist";
+        }
+
+        public override void Run(DAL<Artist> artistDal, DAL<Music> musicDal)
+        {
+            ShowOptionTitle("Show artist details");
             Console.Write("Type the artist's name which you wish to know better: ");
 
             string? name;
@@ -22,7 +26,7 @@ namespace screensound.menu
                 Console.Write("Artist name cannot be empty. Try again: ");
             }
 
-            Artist? artist = dal.First(a => a.Name.Equals(name));
+            Artist? artist = artistDal.First(a => a.Name.Equals(name));
             if (artist == null)
             {
                 Console.Write("Artist name not found!");
@@ -32,10 +36,6 @@ namespace screensound.menu
                 Console.WriteLine("\nDiscography:");
                 artist.ShowDiscography();
             }
-
-            Console.WriteLine("\nPress any key to return to the main menu");
-            Console.ReadKey();
-            Console.Clear();
         }
     }
 }

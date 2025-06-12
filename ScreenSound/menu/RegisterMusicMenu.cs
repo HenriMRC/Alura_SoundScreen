@@ -1,17 +1,19 @@
 ﻿using screensound.database.dal;
 using screensound.models;
 using System;
-using System.Threading;
 
 namespace screensound.menu
 {
     internal class RegisterMusicMenu : Menu
     {
-        public override void Executar(DAL<Artist> dal)
+        public override string GetOptionInstruction(int optionIndex)
         {
-            base.Executar(dal);
+            return $"Type {optionIndex} to register a music";
+        }
 
-            ExibirTituloDaOpcao("Musics registry");
+        public override void Run(DAL<Artist> artistDal, DAL<Music> musicDal)
+        {
+            ShowOptionTitle("Musics registry");
             Console.Write("Type the artist's name whose music you wish to register: ");
 
             string? name;
@@ -24,7 +26,7 @@ namespace screensound.menu
                 Console.Write("Artist name cannot be empty. Try again: ");
             }
 
-            Artist? artist = dal.First(a => a.Name.Equals(name));
+            Artist? artist = artistDal.First(a => a.Name.Equals(name));
             if (artist == null)
             {
                 Console.Write("Artist name not found!");
@@ -57,14 +59,8 @@ namespace screensound.menu
 
                 artist.AddMusic(new Music(music) { YearOfRelease = yor });
                 Console.WriteLine($"The music {music} from {name} was successfully registered!");
-                dal.Update(artist);
-                Thread.Sleep(4000);
-                Console.Clear();
+                artistDal.Update(artist);
             }
-
-            Console.WriteLine("\nPress any key to return to the main menu");
-            Console.ReadKey();
-            Console.Clear();
         }
     }
 }

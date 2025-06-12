@@ -6,17 +6,17 @@ namespace screensound.menu
 {
     internal class ShowArtistsMenu : Menu
     {
-        public override void Executar(DAL<Artist> dal)
+        public override string GetOptionInstruction(int optionIndex)
         {
-            base.Executar(dal);
-            ExibirTituloDaOpcao("Showing all registered artists on our application");
+            return $"Type {optionIndex} to print the artists";
+        }
 
-            foreach (Artist artist in dal.GetList())
+        public override void Run(DAL<Artist> artistDal, DAL<Music> musicDal)
+        {
+            ShowOptionTitle("Showing all registered artists on our application");
+
+            foreach (Artist artist in artistDal.GetList())
                 Console.WriteLine($"Artist:\n{artist}");
-
-            Console.WriteLine("\nType any key to return to the main menu");
-            Console.ReadKey();
-            Console.Clear();
         }
     }
 }
