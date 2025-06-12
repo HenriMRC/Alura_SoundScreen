@@ -40,11 +40,24 @@ namespace screensound.menu
                     if (!string.IsNullOrWhiteSpace(music))
                         break;
 
-                    Console.Write("Artist name cannot be empty. Try again: ");
+                    Console.Write("Music title cannot be empty. Try again: ");
                 }
 
-                artist.AddMusic(new Music(music));
+                Console.Write("Type the music's year of release: ");
+
+                int yor;
+                while (true)
+                {
+                    string? yorStr = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(yorStr) && int.TryParse(yorStr, out yor))
+                        break;
+
+                    Console.Write("Invalid music release year. Try again: ");
+                }
+
+                artist.AddMusic(new Music(music) { YearOfRelease = yor });
                 Console.WriteLine($"The music {music} from {name} was successfully registered!");
+                dal.Update(artist);
                 Thread.Sleep(4000);
                 Console.Clear();
             }
