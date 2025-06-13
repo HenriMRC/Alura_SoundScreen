@@ -41,6 +41,7 @@ namespace screensound.test
             _serverConnection = new(SERVER_CONNECTION_STRING);
             _serverConnection.Open();
 
+            // ===== Create DB =====
             const string CREATE_SSTEST = $"CREATE DATABASE {SSTEST_NAME}";
             using SqlCommand createSsTestCommand = new(CREATE_SSTEST, _serverConnection);
             createSsTestCommand.ExecuteNonQuery();
@@ -48,15 +49,27 @@ namespace screensound.test
             using SqlConnection dbConnection = new(SSTEST_CONNECTION_STRING);
             dbConnection.Open();
 
+            // ===== Create Musics Table =====
             const string CREATE_MUSIC_TABLE =
                 """
                 CREATE TABLE Musics(
                         Id INT PRIMARY KEY IDENTITY(1,1),
-                        Name NVARCHAR(255) NOT NULL);
+                        Name NVARCHAR(255) NOT NULL,
+                        YearOfRelease INT NULL,
+                        ArtistId INT NULL)
                 """;
             using SqlCommand createMusicDbCommand = new(CREATE_MUSIC_TABLE, dbConnection);
             createMusicDbCommand.ExecuteNonQuery();
 
+            const string CREATE_INDEX_MUSIC_TABLE =
+                """
+                CREATE INDEX IX_Musics_ArtistId
+                ON Musics (ArtistId);
+                """;
+            using SqlCommand createIndexMusicDbCommand = new(CREATE_INDEX_MUSIC_TABLE, dbConnection);
+            createIndexMusicDbCommand.ExecuteNonQuery();
+
+            // ===== Create Artists Table =====
             const string CREATE_ARTISTS_TABLE =
                 """
                 CREATE TABLE Artists(
@@ -69,7 +82,15 @@ namespace screensound.test
             using SqlCommand createArtistsDbCommand = new(CREATE_ARTISTS_TABLE, dbConnection);
             createArtistsDbCommand.ExecuteNonQuery();
 
-            dbConnection.Close();
+            // ===== Create Musics FK =====
+            const string CREATE_FK_MUSIC_TABLE =
+                """
+                ALTER TABLE Musics
+                	ADD CONSTRAINT FK_Musics_Artists_ArtistId
+                		FOREIGN KEY (ArtistId) REFERENCES Artists (Id);
+                """;
+            using SqlCommand createFkMusicDbCommand = new(CREATE_FK_MUSIC_TABLE, dbConnection);
+            createFkMusicDbCommand.ExecuteNonQuery();
         }
 
         [Test]
