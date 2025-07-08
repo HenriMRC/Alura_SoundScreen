@@ -6,4 +6,9 @@
     <ImplicitUsings>disnable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\screensound.core.data\screensound.core.data.csproj" />
+    <ProjectReference Include="..\screensound.core.models\screensound.core.models.csproj" />
+  </ItemGroup>
+
 </Project>
