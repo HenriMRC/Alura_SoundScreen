@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using screensound.models;
+using screensound.core.models;
 
 namespace screensound.database
 {

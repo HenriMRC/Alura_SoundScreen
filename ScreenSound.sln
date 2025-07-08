@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.test", "screens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.api", "screensound.api\screensound.api.csproj", "{F7DBE3A2-237A-4E9E-B612-F1A003B8FAE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.core.models", "screensound.core.models\screensound.core.models.csproj", "{D44F6F0F-EFD2-4BCD-AFC6-40F25C4ED7A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F7DBE3A2-237A-4E9E-B612-F1A003B8FAE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7DBE3A2-237A-4E9E-B612-F1A003B8FAE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7DBE3A2-237A-4E9E-B612-F1A003B8FAE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D44F6F0F-EFD2-4BCD-AFC6-40F25C4ED7A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D44F6F0F-EFD2-4BCD-AFC6-40F25C4ED7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D44F6F0F-EFD2-4BCD-AFC6-40F25C4ED7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D44F6F0F-EFD2-4BCD-AFC6-40F25C4ED7A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

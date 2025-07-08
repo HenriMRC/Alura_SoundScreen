@@ -1,4 +1,4 @@
-﻿namespace screensound.models
+﻿namespace screensound.core.models
 {
     public class Music
     {

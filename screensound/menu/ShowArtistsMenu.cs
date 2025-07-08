@@ -1,5 +1,5 @@
 ﻿using screensound.database.dal;
-using screensound.models;
+using screensound.core.models;
 using System;
 
 namespace screensound.menu

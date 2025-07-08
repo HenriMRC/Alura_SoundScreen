@@ -2,7 +2,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using screensound.database;
 using screensound.database.dal;
-using screensound.models;
+using screensound.core.models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

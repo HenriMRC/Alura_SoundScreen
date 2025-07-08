@@ -25,4 +25,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\screensound.core.models\screensound.core.models.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace screensound.models
+namespace screensound.core.models
 {
     public class Artist
     {
@@ -34,7 +34,7 @@ namespace screensound.models
 
         public override string ToString()
         {
-            return 
+            return
 $@"            Id: {Id}
             Name: {Name}
             Profile image: {ProfileImage}
