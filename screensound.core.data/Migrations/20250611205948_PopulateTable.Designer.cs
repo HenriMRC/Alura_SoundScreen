@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using screensound.database;
+using screensound.core.data;
+
 
 #nullable disable
 
 namespace screensound.Migrations
 {
     [DbContext(typeof(ScreenSoundContext))]
-    [Migration("20250610084231_InitialState")]
-    partial class InitialState
+    [Migration("20250611205948_PopulateTable")]
+    partial class PopulateTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

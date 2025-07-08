@@ -1,4 +1,4 @@
-﻿using screensound.database.dal;
+﻿using screensound.core.data.dal;
 using screensound.core.models;
 using System;
 using System.Threading;

@@ -1,7 +1,7 @@
-﻿using screensound.database;
-using screensound.database.dal;
-using screensound.menu;
+﻿using screensound.core.data;
+using screensound.core.data.dal;
 using screensound.core.models;
+using screensound.menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;

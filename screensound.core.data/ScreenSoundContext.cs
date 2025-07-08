@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using screensound.core.models;
 
-namespace screensound.database
+namespace screensound.core.data
 {
     public class ScreenSoundContext : DbContext
     {
