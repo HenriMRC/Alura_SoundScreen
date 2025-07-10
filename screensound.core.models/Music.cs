@@ -7,6 +7,7 @@
         public int? YearOfRelease { get; set; }
         public virtual Artist? Artist { get; set; }
 
+        public Music() : this(string.Empty) { }
         public Music(string name)
         {
             Name = name;

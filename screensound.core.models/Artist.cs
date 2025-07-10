@@ -11,6 +11,7 @@ namespace screensound.core.models
         public int Id { get; set; }
         public virtual ICollection<Music> Musics { get; set; } = new List<Music>();
 
+        public Artist() : this(string.Empty, string.Empty) { }
         public Artist(string name, string bio)
         {
             Name = name;
