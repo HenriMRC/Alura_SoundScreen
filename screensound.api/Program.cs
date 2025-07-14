@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using screensound.core.data;
 using screensound.core.data.dal;
 using screensound.core.models;
 using System.Text.Json.Serialization;
+
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace screensound.api;
 
@@ -20,6 +23,7 @@ public class Program
 
         app.MapGet("/artists", GetArtists);
         app.MapGet("/artists/{name}", GetArtistsByName);
+        app.MapPost("/artists", PostArtist);
 
         app.Run();
     }
@@ -47,4 +51,13 @@ public class Program
         else
             return Results.Ok(data);
     }
+
+    private static IResult PostArtist([FromBody] Artist artist)
+    {
+        ScreenSoundContext context = new();
+        DAL<Artist> dal = new(context);
+        EntityEntry<Artist> entity = dal.Add(artist);
+        return Results.Ok(entity.Entity);
+    }
+
 }
