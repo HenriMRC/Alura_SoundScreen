@@ -30,17 +30,19 @@ namespace screensound.core.data.dal
             return output;
         }
 
-        public EntityEntry<T> Update(T item)
+        public EntityEntry<T> Update(T item) => UpdateAsync(item).Result;
+        public async Task<EntityEntry<T>> UpdateAsync(T item)
         {
             EntityEntry<T> result = context.Set<T>().Update(item);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return result;
         }
 
-        public EntityEntry<T> Remove(T item)
+        public EntityEntry<T> Remove(T item) => RemoveAsync(item).Result;
+        public async Task<EntityEntry<T>> RemoveAsync(T item)
         {
             EntityEntry<T> result = context.Set<T>().Remove(item);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return result;
         }
 
