@@ -5,8 +5,7 @@ namespace screensound.core.data
 {
     public class ScreenSoundContext : DbContext
     {
-        private readonly string _connectionString;
-        private const string CONNECTION_STRING =
+        public const string DEFAULT_CONNECTION_STRING =
             "Data Source=(localdb)\\MSSQLLocalDB;" +
             "Initial Catalog=ScreenSoundV0;" +
             "Integrated Security=True;" +
@@ -21,17 +20,20 @@ namespace screensound.core.data
 
         public ScreenSoundContext()
         {
-            _connectionString = CONNECTION_STRING;
+
         }
 
-        public ScreenSoundContext(string connectionString)
+        public ScreenSoundContext(DbContextOptions options) : base(options)
         {
-            _connectionString = connectionString;
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString).UseLazyLoadingProxies();
+            if (!optionsBuilder.Options.Extensions.Any(e => e.Info.IsDatabaseProvider))
+                optionsBuilder.UseSqlServer(DEFAULT_CONNECTION_STRING);
+
+            optionsBuilder.UseLazyLoadingProxies();
         }
     }
 }

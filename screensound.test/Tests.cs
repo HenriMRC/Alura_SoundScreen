@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using screensound.core.data;
 using screensound.core.data.dal;
@@ -98,7 +99,9 @@ namespace screensound.test
         {
             TestContext.Progress.WriteLine(nameof(TestMusics));
 
-            using ScreenSoundContext context = new(SSTEST_CONNECTION_STRING);
+            DbContextOptionsBuilder builder = new();
+            builder.UseSqlServer(SSTEST_CONNECTION_STRING);
+            using ScreenSoundContext context = new(builder.Options);
 
             DAL<Music> dal = new(context);
 
@@ -171,7 +174,9 @@ namespace screensound.test
         {
             TestContext.Progress.WriteLine(nameof(TestArtists));
 
-            using ScreenSoundContext context = new(SSTEST_CONNECTION_STRING);
+            DbContextOptionsBuilder builder = new();
+            builder.UseSqlServer(SSTEST_CONNECTION_STRING);
+            using ScreenSoundContext context = new(builder.Options);
             DAL<Artist> dal = new(context);
 
             // =======================

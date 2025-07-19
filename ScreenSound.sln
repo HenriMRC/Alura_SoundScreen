@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.core.models", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.core.data", "screensound.core.data\screensound.core.data.csproj", "{A878DBF1-4267-4CD5-ACD0-02E01588073D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.api.test", "screensound.api.test\screensound.api.test.csproj", "{CD49D79F-E2FC-4140-B123-0AC2F25C1112}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A878DBF1-4267-4CD5-ACD0-02E01588073D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A878DBF1-4267-4CD5-ACD0-02E01588073D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A878DBF1-4267-4CD5-ACD0-02E01588073D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD49D79F-E2FC-4140-B123-0AC2F25C1112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD49D79F-E2FC-4140-B123-0AC2F25C1112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD49D79F-E2FC-4140-B123-0AC2F25C1112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD49D79F-E2FC-4140-B123-0AC2F25C1112}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
