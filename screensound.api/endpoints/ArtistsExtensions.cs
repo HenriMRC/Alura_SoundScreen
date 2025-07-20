@@ -8,21 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using static screensound.api.endpoints.Route;
+
 namespace screensound.api.endpoints;
 
 public static class ArtistsExtensions
 {
     public static void AddArtistsEndpoints(this WebApplication app)
     {
-        const string GET_ARTIST_ROUTE = "/artists/{0}";
-        app.MapGet("/artists", GetArtists);
+        app.MapGet(ARTISTS, GetArtists);
         static async Task<IResult> GetArtists([FromServices] DAL<Artist> dal)
         {
             List<Artist> result = await dal.GetListAsync();
             return Results.Ok(result);
         }
 
-        app.MapGet(string.Format(GET_ARTIST_ROUTE, "{name}"), GetArtist);
+        app.MapGet(string.Format(ARTIST_BY, "{name}"), GetArtist);
         static async Task<IResult> GetArtist([FromServices] DAL<Artist> dal, string name)
         {
             Artist? data = await dal.FirstAsync(Predicate);
@@ -37,14 +38,14 @@ public static class ArtistsExtensions
                 return Results.Ok(data);
         }
 
-        app.MapPost("/artists", PostArtist);
+        app.MapPost(ARTISTS, PostArtist);
         static async Task<IResult> PostArtist([FromServices] DAL<Artist> dal, [FromBody] Artist artist)
         {
             EntityEntry<Artist> entity = await dal.AddAsync(artist);
-            return Results.Created(string.Format(GET_ARTIST_ROUTE, artist.Name), entity.Entity);
+            return Results.Created(string.Format(ARTIST_BY, artist.Name), entity.Entity);
         }
 
-        app.MapDelete("/artists/{id}", RemoveArtist);
+        app.MapDelete(string.Format(ARTIST_BY, "{id}"), RemoveArtist);
         static async Task<IResult> RemoveArtist([FromServices] DAL<Artist> dal, int id)
         {
             Artist? artist = await dal.FirstAsync(dal => dal.Id == id);
@@ -55,7 +56,7 @@ public static class ArtistsExtensions
             return Results.NoContent();
         }
 
-        app.MapPut("/artists", UpdateArtist);
+        app.MapPut(ARTISTS, UpdateArtist);
         static async Task<IResult> UpdateArtist([FromServices] DAL<Artist> dal, [FromBody] Artist artist)
         {
             Artist? artistOnDb = await dal.FirstAsync(a => a.Id == artist.Id);

@@ -8,21 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using static screensound.api.endpoints.Route;
+
 namespace screensound.api.endpoints;
 
 public static class MusicsExtensions
 {
     public static void AddMusicsEndpoints(this WebApplication app)
     {
-        app.MapGet("/musics", GetMusics);
+        app.MapGet(MUSICS, GetMusics);
         static async Task<IResult> GetMusics([FromServices] DAL<Music> dal)
         {
             List<Music> result = await dal.GetListAsync();
             return Results.Ok(result);
         }
 
-        const string GET_MUSICS_BY_NAME_ROUTE = "/musics/{0}";
-        app.MapGet(string.Format(GET_MUSICS_BY_NAME_ROUTE, "{name}"), GetMusicsByName);
+        app.MapGet(string.Format(MUSIC_BY, "{name}"), GetMusicsByName);
         static async Task<IResult> GetMusicsByName([FromServices] DAL<Music> dal, string name)
         {
             List<Music> data = await dal.WhereAsync(Predicate);
@@ -37,7 +38,7 @@ public static class MusicsExtensions
                 return Results.Ok(data);
         }
 
-        app.MapPost("/musics", PostMusic);
+        app.MapPost(MUSICS, PostMusic);
         static async Task<IResult> PostMusic([FromServices] DAL<Music> mdal, [FromServices] DAL<Artist> adal, [FromBody] Music music)
         {
             Artist? artist = music.Artist;
@@ -55,10 +56,12 @@ public static class MusicsExtensions
                 }
             }
 
-            return Results.Created(string.Format(GET_MUSICS_BY_NAME_ROUTE, music.Name), entity.Entity);
+            //TODO: Change to return some ReturnData<T> that contains warnings 
+            //in the case that the artist is no found.
+            return Results.Created(string.Format(MUSIC_BY, music.Name), entity.Entity);
         }
 
-        app.MapDelete("/musics/{id}", RemoveMusic);
+        app.MapDelete(string.Format(MUSIC_BY, "{id}"), RemoveMusic);
         static async Task<IResult> RemoveMusic([FromServices] DAL<Music> dal, int id)
         {
             Music? artist = await dal.FirstAsync(dal => dal.Id == id);
@@ -69,18 +72,19 @@ public static class MusicsExtensions
             return Results.NoContent();
         }
 
-        app.MapPut("/musics", UpdateMusic);
+        app.MapPut(MUSICS, UpdateMusic);
         static async Task<IResult> UpdateMusic([FromServices] DAL<Music> dal, [FromBody] Music music)
         {
-            Music? artistOnDb = await dal.FirstAsync(m => m.Id == music.Id);
+            Music? musicOnDb = await dal.FirstAsync(m => m.Id == music.Id);
 
-            if (artistOnDb is null)
+            if (musicOnDb is null)
                 return Results.NotFound();
 
-            artistOnDb.Name = music.Name;
-            artistOnDb.YearOfRelease = music.YearOfRelease;
+            musicOnDb.Name = music.Name;
+            musicOnDb.YearOfRelease = music.YearOfRelease;
+            //TODO: change artist
 
-            EntityEntry<Music> result = await dal.UpdateAsync(artistOnDb);
+            EntityEntry<Music> result = await dal.UpdateAsync(musicOnDb);
             return Results.Ok(result.Entity);
         }
     }
