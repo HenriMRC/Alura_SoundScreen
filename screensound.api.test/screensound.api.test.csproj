@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\screensound.api\screensound.api.csproj" />
+    <ProjectReference Include="..\screensound.test.utils\screensound.test.utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
