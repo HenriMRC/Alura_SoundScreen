@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "screensound", "ScreenSound\screensound.csproj", "{A9CCE41C-6657-42BF-AED4-F3F578033037}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.test", "screensound.test\screensound.test.csproj", "{CF36EFF8-30C9-418A-88A3-73DB34DB49BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.core.test", "screensound.core.test\screensound.core.test.csproj", "{CF36EFF8-30C9-418A-88A3-73DB34DB49BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "screensound.api", "screensound.api\screensound.api.csproj", "{F7DBE3A2-237A-4E9E-B612-F1A003B8FAE3}"
 EndProject

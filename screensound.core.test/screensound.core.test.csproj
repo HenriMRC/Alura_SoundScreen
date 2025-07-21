@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ScreenSound\screensound.csproj" />
+    <ProjectReference Include="..\screensound.core.data\screensound.core.data.csproj" />
+    <ProjectReference Include="..\screensound.core.models\screensound.core.models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
