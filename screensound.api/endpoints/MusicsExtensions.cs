@@ -42,22 +42,24 @@ public static class MusicsExtensions
         static async Task<IResult> PostMusic([FromServices] DAL<Music> mdal, [FromServices] DAL<Artist> adal, [FromBody] Music music)
         {
             Artist? artist = music.Artist;
+            if (artist != null)
+            {
+                int id = artist.Id;
+                artist = await adal.FirstAsync(a => a.Id == id);
+                if (artist == null)
+                    return Results.NotFound($"Artist {id} not found");
+            }
+
             music.Artist = null;
 
             EntityEntry<Music> entity = await mdal.AddAsync(music);
 
-            if (artist != null && artist.Id > 0)
+            if (artist != null)
             {
-                artist = await adal.FirstAsync(a => a.Id == artist.Id);
-                if (artist != null)
-                {
-                    artist.AddMusic(entity.Entity);
-                    await adal.UpdateAsync(artist);
-                }
+                artist.AddMusic(entity.Entity);
+                await adal.UpdateAsync(artist);
             }
 
-            //TODO: Change to return some ReturnData<T> that contains warnings 
-            //in the case that the artist is no found.
             return Results.Created(string.Format(MUSIC_BY, music.Name), entity.Entity);
         }
 

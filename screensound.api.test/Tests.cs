@@ -256,26 +256,12 @@ public class Tests : TestBase
         const int NUMB_YOR = 2003;
         content = JsonContent.Create(new Music() { Name = NUMB, YearOfRelease = NUMB_YOR, Artist = new() { Id = 1_000 } });
         result = client.PostAsync(_url + MUSICS, content).Result;
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-            Assert.That(result.Headers.Location?.OriginalString, Is.EqualTo(string.Format(MUSIC_BY, NUMB)));
-        });
         resultContent = result.Content.ReadAsStringAsync().Result;
-        music = JsonSerializer.Deserialize<Music>(resultContent, JsonSerializerOptions.Web);
-        Assert.That(music, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(music.Name, Is.EqualTo(NUMB));
-            Assert.That(music.YearOfRelease, Is.EqualTo(NUMB_YOR));
-            Assert.That(music.Id, Is.EqualTo(2));
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Assert.That(resultContent, Is.EqualTo($"\"Artist {1_000} not found\""));
         });
-
-        artist = music.Artist;
-        Assert.That(artist, Is.Null);
-
-        result = client.DeleteAsync(_url + string.Format(MUSIC_BY, 2)).Result;
-        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
 
         const string IN_THE_END = "In the end";
         const int IN_THE_END_YOR = 2001;
@@ -293,13 +279,13 @@ public class Tests : TestBase
         {
             Assert.That(music.Name, Is.EqualTo(IN_THE_END));
             Assert.That(music.YearOfRelease, Is.EqualTo(IN_THE_END_YOR));
-            Assert.That(music.Id, Is.EqualTo(3));
+            Assert.That(music.Id, Is.EqualTo(2));
         });
 
         artist = music.Artist;
         Assert.That(artist, Is.Null);
 
-        result = client.DeleteAsync(_url + string.Format(MUSIC_BY, 3)).Result;
+        result = client.DeleteAsync(_url + string.Format(MUSIC_BY, 2)).Result;
         Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
         #endregion
 
