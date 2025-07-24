@@ -29,9 +29,15 @@ public class Program
         builder.Services.AddTransient<DAL<Artist>>();
         builder.Services.AddTransient<DAL<Music>>();
 
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
         WebApplication app = builder.Build();
         app.AddArtistsEndpoints();
         app.AddMusicsEndpoints();
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         return app;
     }
