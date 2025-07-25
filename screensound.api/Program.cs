@@ -30,7 +30,7 @@ public class Program
         builder.Services.AddTransient<DAL<Music>>();
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options => options.SupportNonNullableReferenceTypes());
 
         WebApplication app = builder.Build();
         app.AddArtistsEndpoints();

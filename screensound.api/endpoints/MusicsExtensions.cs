@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using screensound.api.requests;
 using screensound.core.data.dal;
 using screensound.core.models;
 using System;
@@ -39,26 +40,15 @@ public static class MusicsExtensions
         }
 
         app.MapPost(MUSICS, PostMusic);
-        static async Task<IResult> PostMusic([FromServices] DAL<Music> mdal, [FromServices] DAL<Artist> adal, [FromBody] Music music)
+        static async Task<IResult> PostMusic([FromServices] DAL<Music> mdal, [FromServices] DAL<Artist> adal, [FromBody] MusicRequest music)
         {
-            Artist? artist = music.Artist;
-            if (artist != null)
-            {
-                int id = artist.Id;
-                artist = await adal.FirstAsync(a => a.Id == id);
-                if (artist == null)
-                    return Results.NotFound($"Artist {id} not found");
-            }
-
-            music.Artist = null;
+            MusicAdder? adder = await MusicAdder.Get(adal, music.ArtistId);
+            if (adder == null)
+                return Results.NotFound($"Artist {music.ArtistId} not found");
 
             EntityEntry<Music> entity = await mdal.AddAsync(music);
 
-            if (artist != null)
-            {
-                artist.AddMusic(entity.Entity);
-                await adal.UpdateAsync(artist);
-            }
+            await adder.DoAdd(entity.Entity);
 
             return Results.Created(string.Format(MUSIC_BY, music.Name), entity.Entity);
         }
@@ -66,28 +56,69 @@ public static class MusicsExtensions
         app.MapDelete(string.Format(MUSIC_BY, "{id}"), RemoveMusic);
         static async Task<IResult> RemoveMusic([FromServices] DAL<Music> dal, int id)
         {
-            Music? artist = await dal.FirstAsync(dal => dal.Id == id);
-            if (artist is null)
+            Music? music = await dal.FirstAsync(dal => dal.Id == id);
+            if (music is null)
                 return Results.NotFound();
 
-            await dal.RemoveAsync(artist);
+            await dal.RemoveAsync(music);
             return Results.NoContent();
         }
 
         app.MapPut(MUSICS, UpdateMusic);
-        static async Task<IResult> UpdateMusic([FromServices] DAL<Music> dal, [FromBody] Music music)
+        static async Task<IResult> UpdateMusic([FromServices] DAL<Music> mdal, [FromServices] DAL<Artist> adal, [FromBody] UpdateMusicRequest music)
         {
-            Music? musicOnDb = await dal.FirstAsync(m => m.Id == music.Id);
-
+            Music? musicOnDb = await mdal.FirstAsync(m => m.Id == music.Id);
             if (musicOnDb is null)
                 return Results.NotFound();
 
-            musicOnDb.Name = music.Name;
-            musicOnDb.YearOfRelease = music.YearOfRelease;
-            //TODO: change artist
+            MusicAdder? adder;
+            if (music.ArtistId.HasValue)
+            {
+                adder = await MusicAdder.Get(adal, music.ArtistId.Value);
+                if (adder == null)
+                    return Results.NotFound($"Artist {music.ArtistId.Value} not found");
+            }
+            else
+                adder = null;
 
-            EntityEntry<Music> result = await dal.UpdateAsync(musicOnDb);
+
+            if (!string.IsNullOrWhiteSpace(music.Name))
+                musicOnDb.Name = music.Name;
+            if (music.YearOfRelease.HasValue)
+                musicOnDb.YearOfRelease = music.YearOfRelease;
+
+            EntityEntry<Music> result = await mdal.UpdateAsync(musicOnDb);
+
+            adder?.DoAdd(result.Entity);
+
             return Results.Ok(result.Entity);
+        }
+    }
+
+    private class MusicAdder
+    {
+        private readonly Artist _artist;
+        private readonly DAL<Artist> _dal;
+
+        private MusicAdder(DAL<Artist> dal, Artist artist)
+        {
+            _artist = artist;
+            _dal = dal;
+        }
+
+        internal static async Task<MusicAdder?> Get(DAL<Artist> dal, int artistId)
+        {
+            Artist? artist = await dal.FirstAsync(a => a.Id == artistId);
+            if (artist == null)
+                return null;
+            else
+                return new(dal, artist);
+        }
+
+        internal async Task DoAdd(Music music)
+        {
+            _artist.AddMusic(music);
+            await _dal.UpdateAsync(_artist);
         }
     }
 }

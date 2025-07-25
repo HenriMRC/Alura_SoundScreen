@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using screensound.api.requests;
 using screensound.core.data.dal;
 using screensound.core.models;
 using System;
@@ -39,7 +40,7 @@ public static class ArtistsExtensions
         }
 
         app.MapPost(ARTISTS, PostArtist);
-        static async Task<IResult> PostArtist([FromServices] DAL<Artist> dal, [FromBody] Artist artist)
+        static async Task<IResult> PostArtist([FromServices] DAL<Artist> dal, [FromBody] ArtistRequest artist)
         {
             EntityEntry<Artist> entity = await dal.AddAsync(artist);
             return Results.Created(string.Format(ARTIST_BY, artist.Name), entity.Entity);
@@ -57,16 +58,19 @@ public static class ArtistsExtensions
         }
 
         app.MapPut(ARTISTS, UpdateArtist);
-        static async Task<IResult> UpdateArtist([FromServices] DAL<Artist> dal, [FromBody] Artist artist)
+        static async Task<IResult> UpdateArtist([FromServices] DAL<Artist> dal, [FromBody] UpdateArtistRequest artist)
         {
             Artist? artistOnDb = await dal.FirstAsync(a => a.Id == artist.Id);
 
             if (artistOnDb is null)
                 return Results.NotFound();
 
-            artistOnDb.Name = artist.Name;
-            artistOnDb.Bio = artist.Bio;
-            artistOnDb.ProfileImage = artist.ProfileImage;
+            if (!string.IsNullOrWhiteSpace(artist.Name))
+                artistOnDb.Name = artist.Name;
+            if (!string.IsNullOrWhiteSpace(artist.Bio))
+                artistOnDb.Bio = artist.Bio;
+            if (!string.IsNullOrWhiteSpace(artist.ProfileImage))
+                artistOnDb.ProfileImage = artist.ProfileImage;
 
             EntityEntry<Artist> result = await dal.UpdateAsync(artistOnDb);
             return Results.Ok(result.Entity);
