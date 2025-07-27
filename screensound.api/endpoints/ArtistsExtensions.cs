@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using screensound.api.requests;
+using screensound.api.responses;
 using screensound.core.data.dal;
 using screensound.core.models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-using static screensound.api.endpoints.Route;
+using static screensound.api.endpoints.Routes;
 
 namespace screensound.api.endpoints;
 
@@ -21,32 +23,37 @@ public static class ArtistsExtensions
         static async Task<IResult> GetArtists([FromServices] DAL<Artist> dal)
         {
             List<Artist> result = await dal.GetListAsync();
-            return Results.Ok(result);
+            ArtistResponse[] response = [.. result.Select(a => (ArtistResponse)a)];
+            return Results.Ok(response);
         }
 
-        app.MapGet(string.Format(ARTIST_BY, "{name}"), GetArtist);
+        app.MapGet(string.Format(ARTISTS_BY, "{name}"), GetArtist);
         static async Task<IResult> GetArtist([FromServices] DAL<Artist> dal, string name)
         {
-            Artist? data = await dal.FirstAsync(Predicate);
+            Artist? result = await dal.FirstAsync(Predicate);
             bool Predicate(Artist artist)
             {
                 return name.Equals(artist.Name, StringComparison.CurrentCultureIgnoreCase);
             }
 
-            if (data is null)
+            if (result is null)
                 return Results.NotFound();
             else
-                return Results.Ok(data);
+            {
+                ArtistResponse response = result;
+                return Results.Ok(result);
+            }
         }
 
         app.MapPost(ARTISTS, PostArtist);
         static async Task<IResult> PostArtist([FromServices] DAL<Artist> dal, [FromBody] ArtistRequest artist)
         {
-            EntityEntry<Artist> entity = await dal.AddAsync(artist);
-            return Results.Created(string.Format(ARTIST_BY, artist.Name), entity.Entity);
+            EntityEntry<Artist> result = await dal.AddAsync(artist);
+            ArtistResponse response = result.Entity;
+            return Results.Created(string.Format(ARTISTS_BY, artist.Name), response);
         }
 
-        app.MapDelete(string.Format(ARTIST_BY, "{id}"), RemoveArtist);
+        app.MapDelete(string.Format(ARTISTS_BY, "{id}"), RemoveArtist);
         static async Task<IResult> RemoveArtist([FromServices] DAL<Artist> dal, int id)
         {
             Artist? artist = await dal.FirstAsync(dal => dal.Id == id);
@@ -73,7 +80,8 @@ public static class ArtistsExtensions
                 artistOnDb.ProfileImage = artist.ProfileImage;
 
             EntityEntry<Artist> result = await dal.UpdateAsync(artistOnDb);
-            return Results.Ok(result.Entity);
+            ArtistResponse response = result.Entity;
+            return Results.Ok(response);
         }
     }
 }

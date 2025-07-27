@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using screensound.api.requests;
+using screensound.api.responses;
 using screensound.core.data.dal;
 using screensound.core.models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using static screensound.api.endpoints.Route;
+using static screensound.api.endpoints.Routes;
 
 namespace screensound.api.endpoints;
 
@@ -24,7 +25,7 @@ public static class MusicsExtensions
             return Results.Ok(result);
         }
 
-        app.MapGet(string.Format(MUSIC_BY, "{name}"), GetMusicsByName);
+        app.MapGet(string.Format(MUSICS_BY, "{name}"), GetMusicsByName);
         static async Task<IResult> GetMusicsByName([FromServices] DAL<Music> dal, string name)
         {
             List<Music> data = await dal.WhereAsync(Predicate);
@@ -46,14 +47,15 @@ public static class MusicsExtensions
             if (adder == null)
                 return Results.NotFound($"Artist {music.ArtistId} not found");
 
-            EntityEntry<Music> entity = await mdal.AddAsync(music);
+            EntityEntry<Music> result = await mdal.AddAsync(music);
 
-            await adder.DoAdd(entity.Entity);
+            await adder.DoAdd(result.Entity);
 
-            return Results.Created(string.Format(MUSIC_BY, music.Name), entity.Entity);
+            MusicResponse response = result.Entity;
+            return Results.Created(string.Format(MUSICS_BY, music.Name), response);
         }
 
-        app.MapDelete(string.Format(MUSIC_BY, "{id}"), RemoveMusic);
+        app.MapDelete(string.Format(MUSICS_BY, "{id}"), RemoveMusic);
         static async Task<IResult> RemoveMusic([FromServices] DAL<Music> dal, int id)
         {
             Music? music = await dal.FirstAsync(dal => dal.Id == id);
@@ -91,7 +93,8 @@ public static class MusicsExtensions
 
             adder?.DoAdd(result.Entity);
 
-            return Results.Ok(result.Entity);
+            MusicResponse response = result.Entity;
+            return Results.Ok(response);
         }
     }
 

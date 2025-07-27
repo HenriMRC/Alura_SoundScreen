@@ -12,13 +12,13 @@ namespace screensound.api.test;
 public abstract class BaseTest
 {
     protected abstract string DbName { get; }
-    protected string Url => _url;
+    protected string Uri => _uri;
     protected ScreenSoundContext Context => _context;
 
     private IDisposable _webApp;
     private IDisposable _scope;
     private ScreenSoundContext _context;
-    private string _url;
+    private string _uri;
 
     [OneTimeSetUp]
     public virtual void OneTimeSetUp()
@@ -43,7 +43,7 @@ public abstract class BaseTest
 
         Task startupTask = webApp.StartAsync();
         startupTask.Wait();
-        _url = webApp.Urls.First();
+        _uri = webApp.Urls.First();
     }
 
     [OneTimeTearDown]
