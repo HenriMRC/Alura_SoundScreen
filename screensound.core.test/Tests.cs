@@ -9,18 +9,26 @@ using System.Threading.Tasks;
 
 namespace screensound.core.test;
 
-public class Tests : TestBase
+public class Tests
 {
+    private ScreenSoundContext _context;
+
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
+    {
+        DbContextOptionsBuilder builder = new();
+        builder.UseSqlServer(TestUtils.GetSqlConnectionString("ScreenSoundTest"));
+
+        _context = new(builder.Options);
+        _context.Database.EnsureCreated();
+    }
+
     [Test]
     public void TestMusics()
     {
         TestContext.Progress.WriteLine(nameof(TestMusics));
 
-        DbContextOptionsBuilder builder = new();
-        builder.UseSqlServer(DB_CONNECTION_STRING);
-        using ScreenSoundContext context = new(builder.Options);
-
-        DAL<Music> dal = new(context);
+        DAL<Music> dal = new(_context);
 
         Task<List<Music>> listTask = dal.GetListAsync();
         do
@@ -91,10 +99,7 @@ public class Tests : TestBase
     {
         TestContext.Progress.WriteLine(nameof(TestArtists));
 
-        DbContextOptionsBuilder builder = new();
-        builder.UseSqlServer(DB_CONNECTION_STRING);
-        using ScreenSoundContext context = new(builder.Options);
-        DAL<Artist> dal = new(context);
+        DAL<Artist> dal = new(_context);
 
         // =======================
         // Get artist list
@@ -205,5 +210,12 @@ public class Tests : TestBase
 
         Assert.That(listTask.IsCompletedSuccessfully, Is.True);
         Assert.That(listTask.Result, Has.Count.EqualTo(1));
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 }
