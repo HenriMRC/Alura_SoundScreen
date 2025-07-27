@@ -72,7 +72,7 @@ public static class MusicsExtensions
                 return Results.NotFound();
 
             MusicAdder? adder;
-            if (music.ArtistId.HasValue)
+            if (music.ArtistId.HasValue && (musicOnDb.Artist == null || music.ArtistId.Value != musicOnDb.Artist.Id))
             {
                 adder = await MusicAdder.Get(adal, music.ArtistId.Value);
                 if (adder == null)
