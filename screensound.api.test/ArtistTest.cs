@@ -41,7 +41,7 @@ public class ArtistTest : BaseTest
                 Assert.That(artist.Bio, Is.EqualTo(BIO));
                 Assert.That(artist.ProfileImage, Is.EqualTo(Artist.DEFAULT_PROFILE_IMAGE));
                 Assert.That(artist.Id, Is.EqualTo(EXPECTED_ID));
-                CollectionAssert.AreEqual(artist.Musics, Array.Empty<ArtistResponse.MusicData>());
+                Assert.That(artist.Musics, Is.EqualTo(Array.Empty<ArtistResponse.MusicData>()));
             });
         }
 
@@ -59,7 +59,7 @@ public class ArtistTest : BaseTest
                 Assert.That(artist.Bio, Is.EqualTo(BIO));
                 Assert.That(artist.ProfileImage, Is.EqualTo(Artist.DEFAULT_PROFILE_IMAGE));
                 Assert.That(artist.Id, Is.EqualTo(EXPECTED_ID));
-                CollectionAssert.AreEqual(artist.Musics, Array.Empty<ArtistResponse.MusicData>());
+                Assert.That(artist.Musics, Is.EqualTo(Array.Empty<ArtistResponse.MusicData>()));
             });
         }
 
@@ -77,7 +77,7 @@ public class ArtistTest : BaseTest
                 Assert.That(artist.Bio, Is.EqualTo(BIO));
                 Assert.That(artist.ProfileImage, Is.EqualTo(Artist.DEFAULT_PROFILE_IMAGE));
                 Assert.That(artist.Id, Is.EqualTo(EXPECTED_ID));
-                CollectionAssert.AreEqual(artist.Musics, Array.Empty<ArtistResponse.MusicData>());
+                Assert.That(artist.Musics, Is.EqualTo(Array.Empty<ArtistResponse.MusicData>()));
             });
         }
 
@@ -93,7 +93,7 @@ public class ArtistTest : BaseTest
                 Assert.That(artist.Bio, Is.EqualTo(BIO));
                 Assert.That(artist.ProfileImage, Is.EqualTo(Artist.DEFAULT_PROFILE_IMAGE));
                 Assert.That(artist.Id, Is.EqualTo(EXPECTED_ID));
-                CollectionAssert.AreEqual(artist.Musics, Array.Empty<ArtistResponse.MusicData>());
+                Assert.That(artist.Musics, Is.EqualTo(Array.Empty<ArtistResponse.MusicData>()));
             });
         }
 
