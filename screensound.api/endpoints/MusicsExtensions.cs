@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using screensound.api.requests;
@@ -8,6 +9,7 @@ using screensound.core.data.dal;
 using screensound.core.models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using static screensound.api.endpoints.Routes;
@@ -22,22 +24,27 @@ public static class MusicsExtensions
         static async Task<IResult> GetMusics([FromServices] DAL<Music> dal)
         {
             List<Music> result = await dal.GetListAsync();
-            return Results.Ok(result);
+
+            MusicResponse[] response = [.. result.Select(m => (MusicResponse)m)];
+            return Results.Ok(response);
         }
 
         app.MapGet(string.Format(MUSICS_BY, "{name}"), GetMusicsByName);
         static async Task<IResult> GetMusicsByName([FromServices] DAL<Music> dal, string name)
         {
-            List<Music> data = await dal.WhereAsync(Predicate);
+            List<Music> result = await dal.WhereAsync(Predicate);
             bool Predicate(Music music)
             {
                 return name.Equals(music.Name, StringComparison.CurrentCultureIgnoreCase);
             }
 
-            if (data is null)
+            if (result is null)
                 return Results.NotFound();
             else
-                return Results.Ok(data);
+            {
+                MusicResponse[] response = [.. result.Select(m => (MusicResponse)m)];
+                return Results.Ok(response);
+            }
         }
 
         app.MapPost(MUSICS, PostMusic);
