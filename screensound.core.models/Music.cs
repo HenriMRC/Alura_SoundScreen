@@ -1,4 +1,6 @@
-﻿namespace screensound.core.models;
+﻿using System.Collections.Generic;
+
+namespace screensound.core.models;
 
 public class Music(string name)
 {
@@ -6,6 +8,7 @@ public class Music(string name)
     public int Id { get; init; }
     public int? YearOfRelease { get; set; }
     public virtual Artist? Artist { get; set; }
+    public virtual ICollection<Genre> Genres { get; set; } = [];
 
     public Music() : this(string.Empty) { }
 

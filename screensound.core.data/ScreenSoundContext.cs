@@ -37,5 +37,10 @@ namespace screensound.core.data
 
             optionsBuilder.UseLazyLoadingProxies();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Music>().HasMany(m => m.Genres).WithMany(g => g.Musics);
+        }
     }
 }
