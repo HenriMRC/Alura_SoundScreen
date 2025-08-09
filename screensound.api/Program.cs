@@ -28,6 +28,7 @@ public class Program
         builder.Services.AddDbContext<ScreenSoundContext>(dbContextAction);
         builder.Services.AddTransient<DAL<Artist>>();
         builder.Services.AddTransient<DAL<Music>>();
+        builder.Services.AddTransient<DAL<Genre>>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options => options.SupportNonNullableReferenceTypes());
@@ -35,6 +36,7 @@ public class Program
         WebApplication app = builder.Build();
         app.AddArtistsEndpoints();
         app.AddMusicsEndpoints();
+        app.AddGenresEndpoints();
 
         app.UseSwagger();
         app.UseSwaggerUI();
