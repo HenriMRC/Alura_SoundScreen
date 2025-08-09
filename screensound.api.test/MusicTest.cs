@@ -259,7 +259,7 @@ internal class MusicTest : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            Assert.That(resultContent, Is.EqualTo($"\"Artist {1_000} not found\""));
+            Assert.That(resultContent, Is.EqualTo($"\"Artist not found\""));
         });
     }
 }

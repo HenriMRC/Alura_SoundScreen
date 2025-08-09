@@ -49,13 +49,17 @@ public static class MusicsExtensions
         app.MapPost(MUSICS, PostMusic);
         static async Task<IResult> PostMusic([FromServices] DAL<Music> mdal, [FromServices] DAL<Artist> adal, [FromBody] MusicRequest music)
         {
-            MusicAdder? adder = await MusicAdder.Get(adal, music.ArtistId);
-            if (adder == null)
-                return Results.NotFound($"Artist {music.ArtistId} not found");
+            Artist? artist = await adal.FirstAsync(a => a.Id == music.ArtistId);
+            if (artist == null)
+                return Results.NotFound("Artist not found");
 
-            EntityEntry<Music> result = await mdal.AddAsync(music);
-
-            await adder.DoAdd(result.Entity);
+            (string name, _, int? yearOfRelease, _) = music;
+            Music musicForDb = new(name)
+            {
+                Artist = artist,
+                YearOfRelease = yearOfRelease,
+            };
+            EntityEntry<Music> result = await mdal.AddAsync(musicForDb);
 
             MusicResponse response = result.Entity;
             return Results.Created(string.Format(MUSICS_BY, music.Name), response);
@@ -79,56 +83,22 @@ public static class MusicsExtensions
             if (musicOnDb is null)
                 return Results.NotFound();
 
-            MusicAdder? adder;
-            if (music.ArtistId.HasValue && (musicOnDb.Artist == null || music.ArtistId.Value != musicOnDb.Artist.Id))
-            {
-                adder = await MusicAdder.Get(adal, music.ArtistId.Value);
-                if (adder == null)
-                    return Results.NotFound($"Artist {music.ArtistId.Value} not found");
-            }
-            else
-                adder = null;
-
-
             if (!string.IsNullOrWhiteSpace(music.Name))
                 musicOnDb.Name = music.Name;
             if (music.YearOfRelease.HasValue)
                 musicOnDb.YearOfRelease = music.YearOfRelease;
+            if (music.ArtistId.HasValue)
+            {
+                Artist? artist = await adal.FirstAsync(a => a.Id == music.ArtistId);
+                if (artist == null)
+                    return Results.NotFound("Artist not fount");
+                musicOnDb.Artist = artist;
+            }
 
             EntityEntry<Music> result = await mdal.UpdateAsync(musicOnDb);
 
-            if (adder != null)
-                await adder.DoAdd(result.Entity);
-
             MusicResponse response = result.Entity;
             return Results.Ok(response);
-        }
-    }
-
-    private class MusicAdder
-    {
-        private readonly Artist _artist;
-        private readonly DAL<Artist> _dal;
-
-        private MusicAdder(DAL<Artist> dal, Artist artist)
-        {
-            _artist = artist;
-            _dal = dal;
-        }
-
-        internal static async Task<MusicAdder?> Get(DAL<Artist> dal, int artistId)
-        {
-            Artist? artist = await dal.FirstAsync(a => a.Id == artistId);
-            if (artist == null)
-                return null;
-            else
-                return new(dal, artist);
-        }
-
-        internal async Task DoAdd(Music music)
-        {
-            _artist.AddMusic(music);
-            await _dal.UpdateAsync(_artist);
         }
     }
 }

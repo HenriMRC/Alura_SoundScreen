@@ -41,7 +41,7 @@ public static class ArtistsExtensions
             else
             {
                 ArtistResponse response = result;
-                return Results.Ok(result);
+                return Results.Ok(response);
             }
         }
 
