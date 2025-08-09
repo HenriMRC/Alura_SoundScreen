@@ -80,8 +80,10 @@ internal class MusicTest : BaseTest
                 HttpResponseMessage result = client.GetAsync(Routes.GetUriArtistsBy(Uri, METALLICA)).Result;
                 Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
                 string resultContent = result.Content.ReadAsStringAsync().Result;
-                ArtistResponse? artist = JsonSerializer.Deserialize<ArtistResponse>(resultContent, JsonSerializerOptions.Web);
-                Assert.That(artist, Is.Not.Null);
+                ArtistResponse[]? artists = JsonSerializer.Deserialize<ArtistResponse[]>(resultContent, JsonSerializerOptions.Web);
+                Assert.That(artists, Is.Not.Null);
+                Assert.That(artists, Has.Length.EqualTo(1));
+                ArtistResponse artist = artists[0];
                 Assert.Multiple(() =>
                 {
                     Assert.That(artist.Name, Is.EqualTo(METALLICA));
@@ -254,7 +256,7 @@ internal class MusicTest : BaseTest
         const int NUMB_YOR = 2003;
         JsonContent content = JsonContent.Create(new MusicRequest(NUMB, 1_000, NUMB_YOR, null));
         HttpResponseMessage result = client.PostAsync(Routes.GetUriMusics(Uri), content).Result;
-        
+
         string resultContent = result.Content.ReadAsStringAsync().Result;
         Assert.Multiple(() =>
         {

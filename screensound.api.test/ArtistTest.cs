@@ -85,8 +85,10 @@ public class ArtistTest : BaseTest
             HttpResponseMessage result = client.GetAsync(Routes.GetUriArtistsBy(Uri, RIGHT_NAME)).Result;
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             string resultContent = result.Content.ReadAsStringAsync().Result;
-            ArtistResponse? artist = JsonSerializer.Deserialize<ArtistResponse>(resultContent, JsonSerializerOptions.Web);
-            Assert.That(artist, Is.Not.Null);
+            ArtistResponse[]? artists = JsonSerializer.Deserialize<ArtistResponse[]>(resultContent, JsonSerializerOptions.Web);
+            Assert.That(artists, Is.Not.Null);
+            Assert.That(artists, Has.Length.EqualTo(1));
+            ArtistResponse artist = artists[0];
             Assert.Multiple(() =>
             {
                 Assert.That(artist.Name, Is.EqualTo(RIGHT_NAME));

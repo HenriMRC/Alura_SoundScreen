@@ -30,19 +30,13 @@ public static class ArtistsExtensions
         app.MapGet(string.Format(ARTISTS_BY, "{name}"), GetArtist);
         static async Task<IResult> GetArtist([FromServices] DAL<Artist> dal, string name)
         {
-            Artist? result = await dal.FirstAsync(Predicate);
+            List<Artist> result = await dal.WhereAsync(Predicate);
             bool Predicate(Artist artist)
             {
                 return name.Equals(artist.Name, StringComparison.CurrentCultureIgnoreCase);
             }
-
-            if (result is null)
-                return Results.NotFound();
-            else
-            {
-                ArtistResponse response = result;
-                return Results.Ok(response);
-            }
+            ArtistResponse[] response = [.. result.Select(m => (ArtistResponse)m)];
+            return Results.Ok(response);
         }
 
         app.MapPost(ARTISTS, PostArtist);

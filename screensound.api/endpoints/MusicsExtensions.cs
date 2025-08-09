@@ -36,14 +36,8 @@ public static class MusicsExtensions
             {
                 return name.Equals(music.Name, StringComparison.CurrentCultureIgnoreCase);
             }
-
-            if (result is null)
-                return Results.NotFound();
-            else
-            {
-                MusicResponse[] response = [.. result.Select(m => (MusicResponse)m)];
-                return Results.Ok(response);
-            }
+            MusicResponse[] response = [.. result.Select(m => (MusicResponse)m)];
+            return Results.Ok(response);
         }
 
         app.MapPost(MUSICS, PostMusic);
