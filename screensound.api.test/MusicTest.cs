@@ -48,7 +48,7 @@ internal class MusicTest : BaseTest
         {
             const string MUSIC_WRONG_NAME = "Master of Pupets";
             {
-                JsonContent content = JsonContent.Create(new MusicRequest(MUSIC_WRONG_NAME, METALLICA_ID, YEAR_OF_RELEASE));
+                JsonContent content = JsonContent.Create(new MusicRequest(MUSIC_WRONG_NAME, METALLICA_ID, YEAR_OF_RELEASE, null));
                 HttpResponseMessage result = client.PostAsync(Routes.GetUriMusics(Uri), content).Result;
                 Assert.Multiple(() =>
                 {
@@ -197,7 +197,7 @@ internal class MusicTest : BaseTest
         const string IN_THE_END = "In the end";
         const int IN_THE_END_YOR = 2001;
         {
-            JsonContent content = JsonContent.Create(new MusicRequest(IN_THE_END, METALLICA_ID, IN_THE_END_YOR));
+            JsonContent content = JsonContent.Create(new MusicRequest(IN_THE_END, METALLICA_ID, IN_THE_END_YOR, null));
             HttpResponseMessage result = client.PostAsync(Routes.GetUriMusics(Uri), content).Result;
             Assert.Multiple(() =>
             {
@@ -252,8 +252,9 @@ internal class MusicTest : BaseTest
 
         const string NUMB = "Numb";
         const int NUMB_YOR = 2003;
-        JsonContent content = JsonContent.Create(new MusicRequest(NUMB, 1_000, NUMB_YOR));
+        JsonContent content = JsonContent.Create(new MusicRequest(NUMB, 1_000, NUMB_YOR, null));
         HttpResponseMessage result = client.PostAsync(Routes.GetUriMusics(Uri), content).Result;
+        
         string resultContent = result.Content.ReadAsStringAsync().Result;
         Assert.Multiple(() =>
         {

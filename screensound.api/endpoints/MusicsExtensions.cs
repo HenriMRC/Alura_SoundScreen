@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using screensound.api.requests;
@@ -98,7 +97,8 @@ public static class MusicsExtensions
 
             EntityEntry<Music> result = await mdal.UpdateAsync(musicOnDb);
 
-            adder?.DoAdd(result.Entity);
+            if (adder != null)
+                await adder.DoAdd(result.Entity);
 
             MusicResponse response = result.Entity;
             return Results.Ok(response);
